@@ -13,11 +13,15 @@ from flask import (
     request,
     url_for,
 )
+from werkzeug.utils import secure_filename
 
 BASE_DIR = Path(__file__).parent
 CONFIG_DIR = BASE_DIR / "../radio_recorder_host/config" # This let's us keep the UI in a separate project for now.
 SHOWS_FILE = CONFIG_DIR / "config_shows.json"
 STATIONS_FILE = CONFIG_DIR / "config_stations.json"
+
+DEFAULT_REMOTE_DIRECTORY = "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/"
+ARTWORK_UPLOAD_DIR = CONFIG_DIR / "art"
 
 SHOW_FIELDS: Tuple[Tuple[str, str], ...] = (
     ("show", "Show name"),
@@ -40,6 +44,32 @@ def save_json(path: Path, data: Dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, sort_keys=True)
+
+
+def save_uploaded_artwork(uploaded_file) -> tuple[str | None, str | None]:
+    if not uploaded_file or not uploaded_file.filename:
+        return None, None
+
+    filename = secure_filename(uploaded_file.filename)
+    if not filename:
+        return None, "The provided artwork filename is invalid."
+
+    ARTWORK_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+    destination = ARTWORK_UPLOAD_DIR / filename
+    stem = destination.stem
+    suffix = destination.suffix
+    counter = 1
+    while destination.exists():
+        destination = ARTWORK_UPLOAD_DIR / f"{stem}_{counter}{suffix}"
+        counter += 1
+
+    try:
+        uploaded_file.save(destination)
+    except OSError as exc:
+        return None, f"Unable to save artwork file: {exc}"
+
+    return str(destination.resolve()), None
 
 
 app = Flask(__name__)
@@ -74,7 +104,7 @@ def create_show():
     return render_template(
         "shows/form.html",
         show_key="",
-        show_data={},
+        show_data={"remote-directory": DEFAULT_REMOTE_DIRECTORY},
         form_action=url_for("create_show"),
         show_fields=SHOW_FIELDS,
     )
@@ -108,10 +138,31 @@ def handle_show_form_submission(original_key: str | None = None):
         target = url_for("create_show") if original_key is None else url_for("edit_show", show_key=original_key)
         return redirect(target)
 
+    uploaded_artwork = request.files.get("artwork_file_upload")
+    saved_artwork_path, artwork_error = save_uploaded_artwork(uploaded_artwork)
+    if artwork_error:
+        flash(artwork_error, "error")
+        target = url_for("create_show") if original_key is None else url_for("edit_show", show_key=original_key)
+        return redirect(target)
+
     data = {}
     for field, _ in SHOW_FIELDS:
         form_field = field.replace("-", "_")
         value = request.form.get(form_field, "").strip()
+        if field == "remote-directory" and not value:
+            value = DEFAULT_REMOTE_DIRECTORY
+
+        if field == "artwork-file":
+            if saved_artwork_path:
+                data[field] = saved_artwork_path
+                continue
+            if value:
+                data[field] = value
+                continue
+            flash("Field 'artwork-file' is required.", "error")
+            target = url_for("create_show") if original_key is None else url_for("edit_show", show_key=original_key)
+            return redirect(target)
+
         if not value:
             flash(f"Field '{field}' is required.", "error")
             target = url_for("create_show") if original_key is None else url_for("edit_show", show_key=original_key)
