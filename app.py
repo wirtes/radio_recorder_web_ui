@@ -15,7 +15,7 @@ from flask import (
 )
 
 BASE_DIR = Path(__file__).parent
-CONFIG_DIR = BASE_DIR / "config"
+CONFIG_DIR = BASE_DIR / "../radio_recorder_host/config" # This let's us keep the UI in a separate project for now.
 SHOWS_FILE = CONFIG_DIR / "config_shows.json"
 STATIONS_FILE = CONFIG_DIR / "config_stations.json"
 
