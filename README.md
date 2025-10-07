@@ -13,10 +13,10 @@ This project provides a small Flask web application for editing the `config_show
    ```bash
    pip install -r requirements.txt
    ```
-3. Run the development server:
+3. Run the development server (exposed to your local network):
    ```bash
-   flask --app app run --debug
+   flask --app app run --debug --host=0.0.0.0
    ```
-4. Open your browser to [http://localhost:5000](http://localhost:5000) to manage shows and stations.
+4. Open your browser to [http://localhost:5000](http://localhost:5000) or use your machine's local network IP (for example, `http://192.168.1.10:5000`) to manage shows and stations.
 
 Changes are saved directly back to the JSON files in the `config/` directory.
