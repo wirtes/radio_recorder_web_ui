@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <article class="form-card">
+    <header>
+      <h1>{{ 'Add station' if not station_id else 'Edit station' }}</h1>
+      <p>Stations define the available stream URLs and are stored in <code>config/config_stations.json</code>.</p>
+    </header>
+    <form method="post" class="stack">
+      <label for="station_id">Station ID</label>
+      <input type="text" id="station_id" name="station_id" value="{{ request.form.get('station_id', station_id) }}" required placeholder="e.g. KUVO">
+      <small>This value is referenced by shows. Changing it will update all existing shows automatically.</small>
+
+      <label for="stream_url">Stream URL</label>
+      <input type="url" id="stream_url" name="stream_url" value="{{ request.form.get('stream_url', stream_url) }}" required placeholder="https://example.com/stream">
+
+      <footer class="form-actions">
+        <a role="button" class="secondary" href="{{ url_for('list_stations') }}">Cancel</a>
+        <button type="submit">Save station</button>
+      </footer>
+    </form>
+  </article>
+{% endblock %}

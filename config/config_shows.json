@@ -1,0 +1,146 @@
+{
+  "super-sonido": {
+    "show": "Super Sonido",
+    "station": "KUVO",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/super-sonido.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "Super Sonido"
+  },
+  "super-sonidos": {
+    "show": "Super Sonidos",
+    "station": "thedrop",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/super-sonidos.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "daily",
+    "playlist-db-slug": "none"
+  },
+  "kuvo-test": {
+    "show": "KUVO Test",
+    "station": "KUVO",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/kuvo-test.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "daily",
+    "playlist-db-slug": "none"
+  },
+  "latin-soul-party": {
+    "show": "The Latin Soul Party",
+    "station": "KUVO",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/latin-soul-party.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "The Latin Soul Party"
+  },
+  "rb-jukebox": {
+    "show": "R&B Jukebox",
+    "station": "KUVO",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/rb-jukebox.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "R&B Jukebox"
+  },
+  "soulful-strut": {
+    "show": "Soulful Strut",
+    "station": "KUVO",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/soulful-strut.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "Soulful Strut"
+  },
+  "global-soul-lounge": {
+    "show": "Global Soul Lounge",
+    "station": "KUVO",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/global-soul-lounge.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "The Global Soul Lounge"
+  },
+  "self-serve": {
+    "show": "Self Serve",
+    "station": "coloradosound",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/self-serve.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "daily",
+    "playlist-db-slug": "NOPLAYLIST"
+  },
+  "la-molly-sugabear": {
+    "show": "SugaBear and La Molly in the Morning",
+    "station": "thedrop",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/la-molly-suga.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "daily",
+    "playlist-db-slug": "NOPLAYLIST"
+  },
+  "the-morning-set": {
+    "show": "The Morning Set",
+    "station": "KUVO",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/the-morning-set.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "daily",
+    "playlist-db-slug": "The Morning Set"
+  },
+  "influenced": {
+    "show": "Influenced",
+    "station": "KUVO",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/influenced.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "Influenced"
+  },
+  "breakfast-jazz-cafe": {
+    "show": "Breakfast Jazz Cafe",
+    "station": "KUVO",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/breakfast-jazz-cafe.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "Breakfast Jazz Cafe"
+  },
+  "all-nations-rise": {
+    "show": "All Nations Rise",
+    "station": "KUVO",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/all-nations-rise.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "All Nations Rise"
+  },
+  "maria-vibing": {
+    "show": "Maria Vibing",
+    "station": "radio1190",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/maria-vibing.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "Maria Vibing"
+  },
+  "enrichment-time": {
+    "show": "Enrichment Time",
+    "station": "radio1190",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/enrichment-time.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "Enrichment Time"
+  },
+  "sounds-of-france": {
+    "show": "Sounds of France",
+    "station": "radio1190",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/sounds-of-france.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "Sounds of France"
+  },
+  "turnstyles": {
+    "show": "Turnstyles",
+    "station": "radio1190",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/turnstyles.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "Turnstyles"
+  },
+  "looks-like-new": {
+    "show": "Looks Like New",
+    "station": "radio1190",
+    "artwork-file": "/home/alw/code/radio_recorder_host/config/art/looks-like-new.jpg",
+    "remote-directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/",
+    "frequency": "weekly",
+    "playlist-db-slug": "Looks Like New"
+  }
+}
