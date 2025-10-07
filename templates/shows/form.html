@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <article class="form-card">
+    <header>
+      <h1>{{ 'Add show' if not show_key else 'Edit show' }}</h1>
+      <p>Shows are stored in <code>config/config_shows.json</code>. Update the fields below and submit to save your changes.</p>
+    </header>
+    <form method="post" class="stack">
+      <label for="show_key">Slug</label>
+      <input type="text" id="show_key" name="show_key" value="{{ request.form.get('show_key', show_key) }}" required placeholder="e.g. super-sonido">
+      <small>This key must be unique and will be used by the recorder.</small>
+
+      {% for field, label in show_fields %}
+        {% set form_name = field.replace('-', '_') %}
+        <label for="{{ form_name }}">{{ label }}</label>
+        {% set value = request.form.get(form_name, show_data.get(field, '')) %}
+        {% if field == 'station' %}
+          <select id="{{ form_name }}" name="{{ form_name }}" required>
+            <option value="" disabled {{ '' == value and 'selected' or '' }}>Select a station</option>
+            {% for station_id, stream_url in station_choices %}
+              <option value="{{ station_id }}" {{ 'selected' if station_id == value else '' }}>{{ station_id }} — {{ stream_url }}</option>
+            {% endfor %}
+          </select>
+          <small>Stations are configured on the <a href="{{ url_for('list_stations') }}">stations page</a>.</small>
+        {% elif field == 'frequency' %}
+          <select id="{{ form_name }}" name="{{ form_name }}" required>
+            {% for choice in ['daily', 'weekly'] %}
+              <option value="{{ choice }}" {{ 'selected' if choice == value else '' }}>{{ choice.title() }}</option>
+            {% endfor %}
+          </select>
+        {% else %}
+          <input type="text" id="{{ form_name }}" name="{{ form_name }}" value="{{ value }}" required>
+        {% endif %}
+      {% endfor %}
+
+      <footer class="form-actions">
+        <a role="button" class="secondary" href="{{ url_for('list_shows') }}">Cancel</a>
+        <button type="submit">Save show</button>
+      </footer>
+    </form>
+  </article>
+{% endblock %}

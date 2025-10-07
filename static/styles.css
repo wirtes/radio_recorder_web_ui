@@ -1,0 +1,79 @@
+body {
+  background: #f5f6fb;
+}
+
+nav ul li a.active {
+  text-decoration: underline;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  box-shadow: 0 1rem 2rem -1.5rem rgba(0, 0, 0, 0.5);
+}
+
+.table-wrapper table {
+  min-width: 100%;
+}
+
+.table-wrapper table th,
+.table-wrapper table td {
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.table-wrapper table td.stream-url {
+  white-space: normal;
+}
+
+.table-wrapper table td.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table-wrapper table td.actions form {
+  margin: 0;
+}
+
+.form-card {
+  padding: 2rem;
+  border-radius: 1rem;
+  background: white;
+  box-shadow: 0 1rem 2rem -1.5rem rgba(0, 0, 0, 0.5);
+}
+
+.form-card .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.flash-messages {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.flash {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+}
+
+.flash.success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.flash.error {
+  background: #fee2e2;
+  color: #991b1b;
+}

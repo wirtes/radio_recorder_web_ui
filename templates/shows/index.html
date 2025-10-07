@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <header class="page-header">
+    <h1>Shows</h1>
+    <a role="button" href="{{ url_for('create_show') }}">Add show</a>
+  </header>
+
+  {% if shows %}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Slug</th>
+            <th>Show</th>
+            <th>Station</th>
+            <th>Frequency</th>
+            <th>Playlist DB slug</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for key, show in shows.items() %}
+            <tr>
+              <td><code>{{ key }}</code></td>
+              <td>{{ show['show'] }}</td>
+              <td>{{ show['station'] }}</td>
+              <td>{{ show['frequency'] }}</td>
+              <td>{{ show['playlist-db-slug'] }}</td>
+              <td class="actions">
+                <a role="button" href="{{ url_for('edit_show', show_key=key) }}">Edit</a>
+                <form action="{{ url_for('delete_show', show_key=key) }}" method="post" onsubmit="return confirm('Delete show {{ key }}?');">
+                  <button class="secondary" type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>No shows configured yet. Use the “Add show” button to create one.</p>
+  {% endif %}
+{% endblock %}
