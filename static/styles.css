@@ -22,12 +22,14 @@ nav ul li a.active {
 
 .table-wrapper table {
   min-width: 100%;
+  font-size: 0.9rem;
 }
 
 .table-wrapper table th,
 .table-wrapper table td {
   vertical-align: middle;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .table-wrapper table td.stream-url {
