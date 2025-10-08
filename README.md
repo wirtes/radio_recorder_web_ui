@@ -21,3 +21,18 @@ This project provides a small Flask web application for editing the `config_show
 5. Note that `deactivate` is the command to exit the virtual environment.
 
 Changes are saved directly back to the JSON files in the `config/` directory.
+
+## Run as a system service
+
+To have the web interface start automatically at boot on a systemd-based Linux
+distribution, run the provided installer script from the repository root:
+
+```bash
+sudo ./install_service.sh
+```
+
+The script will create a dedicated Python virtual environment, install the
+dependencies from `requirements.txt`, register a `radio-recorder-web-ui`
+systemd unit, and immediately launch the service.  Once the script completes,
+the application is available on port 5000 and will restart automatically if the
+process exits unexpectedly.
