@@ -43,6 +43,12 @@ nav ul li a.active {
   margin: 0;
 }
 
+.table-wrapper table td.actions a[role="button"] {
+  display: inline-flex;
+  align-items: center;
+  padding-block: 0.25rem;
+}
+
 .form-card {
   padding: 2rem;
   border-radius: 1rem;
