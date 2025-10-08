@@ -21,6 +21,7 @@ SHOWS_FILE = CONFIG_DIR / "config_shows.json"
 STATIONS_FILE = CONFIG_DIR / "config_stations.json"
 
 DEFAULT_REMOTE_DIRECTORY = "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/"
+DEFAULT_ARTWORK_PATH = "/home/alw/code/radio_recorder_host/config/art/generic.jpg"
 ARTWORK_UPLOAD_DIR = CONFIG_DIR / "art"
 
 SHOW_FIELDS: Tuple[Tuple[str, str], ...] = (
