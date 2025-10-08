@@ -105,7 +105,10 @@ def create_show():
     return render_template(
         "shows/form.html",
         show_key="",
-        show_data={"remote-directory": DEFAULT_REMOTE_DIRECTORY},
+        show_data={
+            "remote-directory": DEFAULT_REMOTE_DIRECTORY,
+            "artwork-file": DEFAULT_ARTWORK_PATH,
+        },
         form_action=url_for("create_show"),
         show_fields=SHOW_FIELDS,
     )
@@ -160,9 +163,8 @@ def handle_show_form_submission(original_key: str | None = None):
             if value:
                 data[field] = value
                 continue
-            flash("Field 'artwork-file' is required.", "error")
-            target = url_for("create_show") if original_key is None else url_for("edit_show", show_key=original_key)
-            return redirect(target)
+            data[field] = DEFAULT_ARTWORK_PATH
+            continue
 
         if not value:
             flash(f"Field '{field}' is required.", "error")
