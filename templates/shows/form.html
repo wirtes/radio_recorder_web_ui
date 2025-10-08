@@ -6,7 +6,7 @@
       <h1>{{ 'Add show' if not show_key else 'Edit show' }}</h1>
       <p>Shows are stored in <code>config/config_shows.json</code>. Update the fields below and submit to save your changes.</p>
     </header>
-    <form method="post" enctype="multipart/form-data" class="stack">
+    <form method="post" class="stack">
       <label for="show_key">Slug</label>
       <input type="text" id="show_key" name="show_key" value="{{ request.form.get('show_key', show_key) }}" required placeholder="e.g. super-sonido">
       <small>This key must be unique and will be used by the recorder.</small>
@@ -31,8 +31,6 @@
           </select>
         {% elif field == 'artwork-file' %}
           <input type="text" id="{{ form_name }}" name="{{ form_name }}" value="{{ value }}" placeholder="Path to the artwork file">
-          <input type="file" id="{{ form_name }}_upload" name="{{ form_name }}_upload" accept="image/*">
-          <small>Uploading an image will store it locally and update the artwork file path.</small>
         {% else %}
           <input type="text" id="{{ form_name }}" name="{{ form_name }}" value="{{ value }}" required>
         {% endif %}
