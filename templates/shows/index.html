@@ -28,7 +28,9 @@
               <td>{{ show['frequency'] }}</td>
               <td>{{ show['playlist-db-slug'] }}</td>
               <td class="actions">
-                <a role="button" href="{{ url_for('edit_show', show_key=key) }}">Edit</a>
+                <form action="{{ url_for('edit_show', show_key=key) }}" method="get">
+                  <button type="submit">Edit</button>
+                </form>
                 <form action="{{ url_for('delete_show', show_key=key) }}" method="post" onsubmit="return confirm('Delete show {{ key }}?');">
                   <button class="secondary" type="submit">Delete</button>
                 </form>
