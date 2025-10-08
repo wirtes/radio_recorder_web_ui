@@ -60,7 +60,7 @@ def inject_globals():
 
 @app.route("/")
 def home():
-    return redirect(url_for("list_shows"))
+    return render_template("home.html")
 
 
 @app.route("/shows")

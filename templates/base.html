@@ -15,6 +15,7 @@
       {% set show_endpoints = ['list_shows', 'create_show', 'edit_show'] %}
       {% set station_endpoints = ['list_stations', 'create_station', 'edit_station'] %}
       <ul>
+        <li><a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint == 'home' else '' }}">Home</a></li>
         <li><a href="{{ url_for('list_shows') }}" class="{{ 'active' if request.endpoint in show_endpoints else '' }}">Shows</a></li>
         <li><a href="{{ url_for('list_stations') }}" class="{{ 'active' if request.endpoint in station_endpoints else '' }}">Stations</a></li>
       </ul>
