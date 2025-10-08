@@ -18,5 +18,6 @@ This project provides a small Flask web application for editing the `config_show
    flask --app app run --debug --host=0.0.0.0
    ```
 4. Open your browser to [http://localhost:5000](http://localhost:5000) or use your machine's local network IP (for example, `http://192.168.1.10:5000`) to manage shows and stations.
+5. Note that `deactivate` is the command to exit the virtual environment.
 
 Changes are saved directly back to the JSON files in the `config/` directory.
