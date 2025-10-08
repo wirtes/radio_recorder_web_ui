@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="instructions">
+  <h2>Getting Started</h2>
+  <p>Follow the steps below to configure the Radio Recorder:</p>
+  <ol>
+    <li>Ensure your radio station is created.</li>
+    <li>Create your show.</li>
+    <li>Manually put your JPEG artwork into the directory at <code>debian-04.lan:/home/alw/code/radio_recorder_host/config/art</code>.</li>
+    <li>Schedule a cron job on <code>debian-04.lan</code> with <code>crontab -e</code>.</li>
+  </ol>
+</section>
+{% endblock %}
