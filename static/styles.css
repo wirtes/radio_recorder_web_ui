@@ -65,6 +65,28 @@ nav ul li a.active {
   margin-top: 1.5rem;
 }
 
+.rss-input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.rss-input-row input[type="url"] {
+  flex: 1 1 auto;
+}
+
+#test-status[data-state="loading"] {
+  color: #4b5563;
+}
+
+#test-status[data-state="success"] {
+  color: #065f46;
+}
+
+#test-status[data-state="error"] {
+  color: #991b1b;
+}
+
 .flash-messages {
   display: grid;
   gap: 0.5rem;
