@@ -36,6 +36,12 @@
                 </form>
               </td>
             </tr>
+            <tr class="podcast-remote-row">
+              <td colspan="6">
+                <span class="label">Remote directory</span>
+                <code>{{ data.get('remote_directory', default_remote_directory) }}</code>
+              </td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>

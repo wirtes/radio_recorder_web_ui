@@ -25,6 +25,7 @@ PODCASTS_FILE = CONFIG_DIR / "config_podcasts.json"
 
 DEFAULT_REMOTE_DIRECTORY = "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/"
 DEFAULT_ARTWORK_PATH = "/home/alw/code/radio_recorder_host/config/art/generic.jpg"
+DEFAULT_PODCAST_REMOTE_DIRECTORY = "alwirtes@plex-server.lan:/Volumes/External_12tb/Podcasts/"
 
 SHOW_FIELDS: Tuple[Tuple[str, str], ...] = (
     ("show", "Show name"),
@@ -168,7 +169,11 @@ def delete_show(show_key: str):
 def list_podcasts():
     podcasts = load_json(PODCASTS_FILE)
     sorted_podcasts = dict(sorted(podcasts.items(), key=lambda item: item[0].lower()))
-    return render_template("podcasts/index.html", podcasts=sorted_podcasts)
+    return render_template(
+        "podcasts/index.html",
+        podcasts=sorted_podcasts,
+        default_remote_directory=DEFAULT_PODCAST_REMOTE_DIRECTORY,
+    )
 
 
 @app.route("/podcasts/new", methods=["GET", "POST"])
@@ -184,6 +189,7 @@ def create_podcast():
             "author": "",
             "last_build_date": "",
             "download_old_episodes": False,
+            "remote_directory": DEFAULT_PODCAST_REMOTE_DIRECTORY,
         },
         form_action=url_for("create_podcast"),
     )
@@ -202,7 +208,12 @@ def edit_podcast(podcast_id: str):
     return render_template(
         "podcasts/form.html",
         podcast_id=podcast_id,
-        podcast_data=podcasts[podcast_id],
+        podcast_data={
+            **podcasts[podcast_id],
+            "remote_directory": podcasts[podcast_id].get(
+                "remote_directory", DEFAULT_PODCAST_REMOTE_DIRECTORY
+            ),
+        },
         form_action=url_for("edit_podcast", podcast_id=podcast_id),
     )
 
@@ -214,6 +225,10 @@ def handle_podcast_submission(original_id: str | None = None):
     author = request.form.get("author", "").strip()
     last_build_date = request.form.get("last_build_date", "").strip()
     download_old_episodes = request.form.get("download_old_episodes") == "on"
+    remote_directory = request.form.get("remote_directory", "").strip()
+
+    if not remote_directory:
+        remote_directory = DEFAULT_PODCAST_REMOTE_DIRECTORY
 
     if not podcast_id:
         flash("A podcast ID is required.", "error")
@@ -237,6 +252,7 @@ def handle_podcast_submission(original_id: str | None = None):
         "author": author,
         "last_build_date": last_build_date,
         "download_old_episodes": download_old_episodes,
+        "remote_directory": remote_directory,
     }
 
     save_json(PODCASTS_FILE, podcasts)
