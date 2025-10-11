@@ -14,10 +14,12 @@
       </ul>
       {% set show_endpoints = ['list_shows', 'create_show', 'edit_show'] %}
       {% set station_endpoints = ['list_stations', 'create_station', 'edit_station'] %}
+      {% set podcast_endpoints = ['list_podcasts', 'create_podcast', 'edit_podcast'] %}
       <ul>
         <li><a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint == 'home' else '' }}">Home</a></li>
         <li><a href="{{ url_for('list_shows') }}" class="{{ 'active' if request.endpoint in show_endpoints else '' }}">Shows</a></li>
         <li><a href="{{ url_for('list_stations') }}" class="{{ 'active' if request.endpoint in station_endpoints else '' }}">Stations</a></li>
+        <li><a href="{{ url_for('list_podcasts') }}" class="{{ 'active' if request.endpoint in podcast_endpoints else '' }}">Podcasts</a></li>
       </ul>
     </nav>
 
@@ -35,7 +37,7 @@
     </main>
 
     <footer class="container">
-      <small>Changes are written directly to <code>config/config_shows.json</code> and <code>config/config_stations.json</code>.</small>
+      <small>Changes are written directly to <code>config/config_shows.json</code>, <code>config/config_stations.json</code>, and <code>config/config_podcasts.json</code>.</small>
     </footer>
   </body>
 </html>

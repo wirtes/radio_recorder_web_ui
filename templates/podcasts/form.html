@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <article class="form-card">
+    <header>
+      <h1>{{ 'Add podcast' if not podcast_id else 'Edit podcast' }}</h1>
+      <p>Podcasts are stored in <code>config/config_podcasts.json</code>. Use the RSS feed tester to fetch metadata automatically.</p>
+    </header>
+    <form action="{{ form_action }}" method="post" class="stack" id="podcast-form" data-test-endpoint="{{ url_for('test_podcast_feed') }}">
+      <label for="podcast_id">Podcast ID</label>
+      <input type="text" id="podcast_id" name="podcast_id" value="{{ request.form.get('podcast_id', podcast_id) }}" required placeholder="e.g. daily-tech" autocomplete="off">
+      <small>This identifier is used as the key inside the configuration file.</small>
+
+      <label for="rss_feed">RSS feed URL</label>
+      <div class="rss-input-row">
+        <input type="url" id="rss_feed" name="rss_feed" value="{{ request.form.get('rss_feed', podcast_data['rss_feed']) }}" required placeholder="https://example.com/feed.xml">
+        <button type="button" class="secondary" id="test-rss">Test RSS</button>
+      </div>
+      <small id="test-status" role="status"></small>
+
+      <label for="author">Author</label>
+      <input type="text" id="author" name="author" value="{{ request.form.get('author', podcast_data['author']) }}" placeholder="Fetched from RSS feed">
+
+      <label for="last_build_date">Last build date</label>
+      <input type="text" id="last_build_date" name="last_build_date" value="{{ request.form.get('last_build_date', podcast_data['last_build_date']) }}" placeholder="Fetched from RSS feed">
+
+      {% if request.method == 'POST' %}
+        {% set download_checked = request.form.get('download_old_episodes') is not none %}
+      {% else %}
+        {% set download_checked = podcast_data['download_old_episodes'] %}
+      {% endif %}
+      <label class="checkbox">
+        <input type="checkbox" id="download_old_episodes" name="download_old_episodes" {% if download_checked %}checked{% endif %}>
+        <span>Download old episodes when first configured</span>
+      </label>
+
+      <footer class="form-actions">
+        <a role="button" class="secondary" href="{{ url_for('list_podcasts') }}">Cancel</a>
+        <button type="submit">Save podcast</button>
+      </footer>
+    </form>
+  </article>
+
+  <script>
+    (function () {
+      const form = document.getElementById('podcast-form');
+      if (!form) {
+        return;
+      }
+
+      const testButton = document.getElementById('test-rss');
+      const rssField = document.getElementById('rss_feed');
+      const authorField = document.getElementById('author');
+      const lastBuildField = document.getElementById('last_build_date');
+      const statusField = document.getElementById('test-status');
+
+      if (!testButton || !rssField || !statusField) {
+        return;
+      }
+
+      testButton.addEventListener('click', async () => {
+        const feedUrl = rssField.value.trim();
+        statusField.textContent = '';
+
+        if (!feedUrl) {
+          statusField.textContent = 'Enter an RSS feed URL to test.';
+          statusField.dataset.state = 'error';
+          return;
+        }
+
+        testButton.setAttribute('aria-busy', 'true');
+        statusField.textContent = 'Testing RSS feed…';
+        statusField.dataset.state = 'loading';
+
+        try {
+          const response = await fetch(form.dataset.testEndpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ feed_url: feedUrl }),
+          });
+
+          const payload = await response.json();
+
+          if (!response.ok || !payload.success) {
+            const message = payload && payload.message ? payload.message : 'Unable to validate RSS feed.';
+            statusField.textContent = message;
+            statusField.dataset.state = 'error';
+            return;
+          }
+
+          if (authorField) {
+            authorField.value = payload.author || '';
+          }
+
+          if (lastBuildField) {
+            lastBuildField.value = payload.last_build_date || '';
+          }
+
+          statusField.textContent = 'RSS feed validated successfully.';
+          statusField.dataset.state = 'success';
+        } catch (error) {
+          statusField.textContent = 'Unable to validate RSS feed.';
+          statusField.dataset.state = 'error';
+        } finally {
+          testButton.removeAttribute('aria-busy');
+        }
+      });
+    })();
+  </script>
+{% endblock %}

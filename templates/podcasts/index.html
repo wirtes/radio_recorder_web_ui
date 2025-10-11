@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <header class="page-header">
+    <h1>Podcasts</h1>
+    <a role="button" href="{{ url_for('create_podcast') }}">Add podcast</a>
+  </header>
+
+  {% if podcasts %}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Podcast ID</th>
+            <th>RSS feed</th>
+            <th>Author</th>
+            <th>Last build date</th>
+            <th>Download old episodes?</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for podcast_id, data in podcasts.items() %}
+            <tr>
+              <td><code>{{ podcast_id }}</code></td>
+              <td class="stream-url">{{ data.get('rss_feed', '') }}</td>
+              <td>{{ data.get('author') or '—' }}</td>
+              <td>{{ data.get('last_build_date') or '—' }}</td>
+              <td>{{ 'Yes' if data.get('download_old_episodes') else 'No' }}</td>
+              <td class="actions">
+                <form action="{{ url_for('edit_podcast', podcast_id=podcast_id) }}" method="get">
+                  <button type="submit">Edit</button>
+                </form>
+                <form action="{{ url_for('delete_podcast', podcast_id=podcast_id) }}" method="post" onsubmit="return confirm('Delete podcast {{ podcast_id }}?');">
+                  <button class="secondary" type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>No podcasts configured yet. Use the “Add podcast” button to create one.</p>
+  {% endif %}
+{% endblock %}

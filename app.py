@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import json
 import os
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Dict, Tuple
+from xml.etree import ElementTree
 
 from flask import (
     Flask,
@@ -18,6 +21,7 @@ BASE_DIR = Path(__file__).parent
 CONFIG_DIR = BASE_DIR / "../radio_recorder_host/config" # This let's us keep the UI in a separate project for now.
 SHOWS_FILE = CONFIG_DIR / "config_shows.json"
 STATIONS_FILE = CONFIG_DIR / "config_stations.json"
+PODCASTS_FILE = CONFIG_DIR / "config_podcasts.json"
 
 DEFAULT_REMOTE_DIRECTORY = "alwirtes@plex-server.lan:/Volumes/External_12tb/Plex/Radio\\ Rips/"
 DEFAULT_ARTWORK_PATH = "/home/alw/code/radio_recorder_host/config/art/generic.jpg"
@@ -158,6 +162,143 @@ def delete_show(show_key: str):
     else:
         flash(f"Show '{show_key}' was not found.", "error")
     return redirect(url_for("list_shows"))
+
+
+@app.route("/podcasts")
+def list_podcasts():
+    podcasts = load_json(PODCASTS_FILE)
+    sorted_podcasts = dict(sorted(podcasts.items(), key=lambda item: item[0].lower()))
+    return render_template("podcasts/index.html", podcasts=sorted_podcasts)
+
+
+@app.route("/podcasts/new", methods=["GET", "POST"])
+def create_podcast():
+    if request.method == "POST":
+        return handle_podcast_submission()
+
+    return render_template(
+        "podcasts/form.html",
+        podcast_id="",
+        podcast_data={
+            "rss_feed": "",
+            "author": "",
+            "last_build_date": "",
+            "download_old_episodes": False,
+        },
+        form_action=url_for("create_podcast"),
+    )
+
+
+@app.route("/podcasts/<podcast_id>/edit", methods=["GET", "POST"])
+def edit_podcast(podcast_id: str):
+    podcasts = load_json(PODCASTS_FILE)
+    if podcast_id not in podcasts:
+        flash(f"Podcast '{podcast_id}' was not found.", "error")
+        return redirect(url_for("list_podcasts"))
+
+    if request.method == "POST":
+        return handle_podcast_submission(original_id=podcast_id)
+
+    return render_template(
+        "podcasts/form.html",
+        podcast_id=podcast_id,
+        podcast_data=podcasts[podcast_id],
+        form_action=url_for("edit_podcast", podcast_id=podcast_id),
+    )
+
+
+def handle_podcast_submission(original_id: str | None = None):
+    podcasts = load_json(PODCASTS_FILE)
+    podcast_id = request.form.get("podcast_id", "").strip()
+    rss_feed = request.form.get("rss_feed", "").strip()
+    author = request.form.get("author", "").strip()
+    last_build_date = request.form.get("last_build_date", "").strip()
+    download_old_episodes = request.form.get("download_old_episodes") == "on"
+
+    if not podcast_id:
+        flash("A podcast ID is required.", "error")
+        target = url_for("create_podcast") if original_id is None else url_for("edit_podcast", podcast_id=original_id)
+        return redirect(target)
+
+    if not rss_feed:
+        flash("An RSS feed URL is required.", "error")
+        target = url_for("create_podcast") if original_id is None else url_for("edit_podcast", podcast_id=original_id)
+        return redirect(target)
+
+    if original_id and original_id != podcast_id and podcast_id in podcasts:
+        flash(f"Podcast '{podcast_id}' already exists.", "error")
+        return redirect(url_for("edit_podcast", podcast_id=original_id))
+
+    if original_id and original_id in podcasts and original_id != podcast_id:
+        podcasts.pop(original_id)
+
+    podcasts[podcast_id] = {
+        "rss_feed": rss_feed,
+        "author": author,
+        "last_build_date": last_build_date,
+        "download_old_episodes": download_old_episodes,
+    }
+
+    save_json(PODCASTS_FILE, podcasts)
+
+    flash(f"Podcast '{podcast_id}' saved successfully.", "success")
+    return redirect(url_for("list_podcasts"))
+
+
+@app.post("/podcasts/<podcast_id>/delete")
+def delete_podcast(podcast_id: str):
+    podcasts = load_json(PODCASTS_FILE)
+    if podcast_id in podcasts:
+        podcasts.pop(podcast_id)
+        save_json(PODCASTS_FILE, podcasts)
+        flash(f"Podcast '{podcast_id}' deleted.", "success")
+    else:
+        flash(f"Podcast '{podcast_id}' was not found.", "error")
+    return redirect(url_for("list_podcasts"))
+
+
+@app.post("/podcasts/test")
+def test_podcast_feed():
+    data = request.get_json(silent=True) or {}
+    feed_url = (data.get("feed_url") or "").strip()
+
+    if not feed_url:
+        return {"success": False, "message": "Feed URL is required."}, 400
+
+    try:
+        request_obj = urllib.request.Request(feed_url, headers={"User-Agent": "RadioRecorderConfig/1.0"})
+        with urllib.request.urlopen(request_obj, timeout=10) as response:
+            xml_bytes = response.read()
+    except (urllib.error.URLError, ValueError) as exc:
+        return {"success": False, "message": f"Failed to retrieve RSS feed: {exc}"}, 502
+
+    try:
+        root = ElementTree.fromstring(xml_bytes)
+    except ElementTree.ParseError as exc:
+        return {"success": False, "message": f"Failed to parse RSS feed: {exc}"}, 502
+
+    channel = root.find("channel")
+    if channel is None:
+        channel = root.find("./rss/channel")
+    if channel is None:
+        return {"success": False, "message": "RSS feed is missing a channel element."}, 502
+
+    author = ""
+    for child in channel:
+        tag = child.tag
+        if "}" in tag:
+            tag = tag.split("}", 1)[1]
+        if tag.lower() == "author":
+            author = (child.text or "").strip()
+            break
+
+    last_build_date = (channel.findtext("lastBuildDate") or "").strip()
+
+    return {
+        "success": True,
+        "author": author,
+        "last_build_date": last_build_date,
+    }
 
 
 @app.route("/stations")
