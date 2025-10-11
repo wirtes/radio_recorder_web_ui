@@ -1,0 +1,9 @@
+{
+  "sample-podcast": {
+    "rss_feed": "https://example.com/feed.xml",
+    "author": "Sample Author",
+    "last_build_date": "Wed, 21 Jun 2023 07:00:00 GMT",
+    "download_old_episodes": false,
+    "remote_directory": "alwirtes@plex-server.lan:/Volumes/External_12tb/Podcasts/"
+  }
+}

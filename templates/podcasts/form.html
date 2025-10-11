@@ -24,6 +24,9 @@
       <label for="last_build_date">Last build date</label>
       <input type="text" id="last_build_date" name="last_build_date" value="{{ request.form.get('last_build_date', podcast_data['last_build_date']) }}" placeholder="Fetched from RSS feed">
 
+      <label for="remote_directory">Remote directory</label>
+      <input type="text" id="remote_directory" name="remote_directory" value="{{ request.form.get('remote_directory', podcast_data['remote_directory']) }}" required>
+
       {% if request.method == 'POST' %}
         {% set download_checked = request.form.get('download_old_episodes') is not none %}
       {% else %}
